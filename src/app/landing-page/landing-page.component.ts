@@ -12,6 +12,5 @@ export class LandingPageComponent {
 
    onContinue(){
     this.router.navigateByUrl('facesnaps');
-
    }
 }

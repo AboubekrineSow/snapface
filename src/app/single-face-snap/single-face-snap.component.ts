@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FaceSnap } from '../models/face-snap';
 import { FaceSnapsService } from '../services/face-snaps.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-single-face-snap',
@@ -8,18 +9,18 @@ import { FaceSnapsService } from '../services/face-snaps.service';
   styleUrls: ['./single-face-snap.component.scss']
 })
 export class SingleFaceSnapComponent implements OnInit{
-  @Input() faceSnap!: FaceSnap;
-  
+  faceSnap!: FaceSnap;
   userHasSnapped!: boolean;
   snapButtonText!: string;
 
-  constructor(private faceSnapsService: FaceSnapsService) {}
+  constructor(private faceSnapsService: FaceSnapsService, 
+    private route : ActivatedRoute) {}
 
-  ngOnInit(): void {
-    this.snapButtonText = "Oh Snap!";
-    this.userHasSnapped = false;
-  }
-
+    ngOnInit(): void {
+      this.prepareInterface();
+      this.getFaceSnap();
+    }
+    
   
   onSnap(): void {
     if (this.userHasSnapped) {
@@ -41,6 +42,16 @@ export class SingleFaceSnapComponent implements OnInit{
     this.userHasSnapped = true;
   }
 
+  
+  private prepareInterface() {
+    this.snapButtonText = 'Oh Snap!';
+    this.userHasSnapped = false;
+  }
+
+  private getFaceSnap() {
+    const faceSnapId = this.route.snapshot.params['id'];
+    this.faceSnap = this.faceSnapsService.getFaceSnapById(faceSnapId);
+  }
 
 
 }
